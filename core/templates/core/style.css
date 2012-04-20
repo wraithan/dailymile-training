@@ -1,0 +1,16 @@
+body {
+  height: 100%;
+  width: 100%;
+}
+
+#chart {
+  background-color: red;
+  height: 100px;
+  width: 100px;
+}
+
+.real {
+  float: left;
+  background-color: blue;
+  width: 10px;
+}

@@ -2,11 +2,19 @@
 <html>
   <head>
     <link href="./style.css" media="screen" rel="stylesheet" type="text/css">
+    <script src="./chart.js" type="text/javascript">
+    </script>
   </head>
   <body>
     <div id="chart"></div>
+    <script type="text/javascript">
 
-    <script src="./chart.js" type="text/javascript" defer>
+var data1 = [{'type': 'bike', 'real': 190, 'goal': 160},
+             {'type': 'hike', 'real': 5, 'goal': 8},
+             {'type': 'run', 'real': 15, 'goal': 15}];
+
+graph(data1);
+
     </script>
   </body>
 </html>

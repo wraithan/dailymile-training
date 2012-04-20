@@ -1,16 +1,14 @@
-body {
-  height: 100%;
-  width: 100%;
-}
-
-#chart {
-  background-color: red;
-  height: 100px;
-  width: 100px;
+#chart div {
+  height: 20px;
+  margin: 1px;
+  border-top-right-radius:    3px;
+  border-bottom-right-radius: 3px;
 }
 
 .real {
-  float: left;
-  background-color: blue;
-  width: 10px;
+  background-color: rgba(100, 255, 0, 0.5);
+}
+
+.goal {
+  background-color: rgba(200, 100, 105, 0.5);
 }

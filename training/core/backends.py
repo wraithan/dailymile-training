@@ -1,8 +1,11 @@
+import json
+
 from django.conf import settings
 from django.contrib.auth.models import User
+import requests
 
-from core import DAILYMILE_TOKEN_URI, oauth2_token
-from core.models import DailyMileProfile
+from training.core import DAILYMILE_TOKEN_URI, oauth2_token
+from training.core.models import DailyMileProfile
 
 
 class OAuth2Backend(object):
@@ -25,21 +28,30 @@ class OAuth2Backend(object):
                                       code,
                                       settings.DAILYMILE_REDIRECT_URI)
 
-            user = User.objects.filter(geoloqiprofile__oauth_user_id=auth_stuff['user_id'])
+            api_endpoint='https://api.dailymile.com/'
+
+            user_stuff = json.loads(requests.get(
+                api_endpoint + 'people/me.json',
+                params={'oauth_token': auth_stuff['access_token']}
+            ).content)
+
+            user = User.objects.filter(username=user_stuff['username'])
+
             if user.exists():
                 user = user.get()
                 profile = user.get_profile()
-                profile.access_token=auth_stuff['access_token']
-                profile.refresh_token=auth_stuff['refresh_token']
+                profile.access_token = auth_stuff['access_token']
                 profile.save()
             else:
-                user = User.objects.create(username=auth_stuff['username'],
-                                           first_name=auth_stuff['display_name'],
-                                           is_active=True, email='')
-                GeoloqiProfile.objects.create(user=user,
-                                              oauth_user_id=auth_stuff['user_id'],
-                                              access_token=auth_stuff['access_token'],
-                                              refresh_token=auth_stuff['refresh_token'])
+                user = User.objects.create(
+                    username=user_stuff['username'],
+                    first_name=user_stuff['display_name'],
+                    is_active=True, email=''
+                )
+                DailyMileProfile.objects.create(
+                    user=user,
+                    access_token=auth_stuff['access_token'],
+                )
 
         return user
 

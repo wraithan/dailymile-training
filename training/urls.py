@@ -1,17 +1,26 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls.defaults import patterns, include, url
+from django.views.generic.base import TemplateView
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'training.views.home', name='home'),
-    # url(r'^training/', include('training.foo.urls')),
+    url(r'^$',
+        TemplateView.as_view(template_name='core/index.html'),
+        name='index'),
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^register/dailymile$',
+        'training.core.views.register_dailymile',
+        name='core_register_dailymile'),
 
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^register/dailymile-callback$',
+        'training.core.views.register_dailymile_callback',
+        name='core_register_dailymile_callback'),
+
+    url(r'^logout$',
+        'django.contrib.auth.views.logout',
+        {'next_page': '/'},
+        name='logout'),
+
+    url(r'^profile/(?P<username>[\w.@+-]+)$',
+        'training.core.views.profile_view',
+        name='core_profile_view'),
 )

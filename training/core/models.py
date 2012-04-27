@@ -5,6 +5,7 @@ import math
 from time import mktime
 
 from django.db import models
+from model_utils import Choices
 import requests
 
 
@@ -48,8 +49,10 @@ class DailyMileProfile(models.Model):
         return json.dumps(prepared_goals)
 
 class Goal(models.Model):
+    WORKOUT_TYPE = Choices('Cycling', 'Hiking', 'Running',
+                           'Walking', 'Swimming')
     owner = models.ForeignKey('core.DailyMileProfile')
-    workout_type = models.CharField(max_length=255)
+    workout_type = models.CharField(choices=WORKOUT_TYPE, max_length=255)
     goal = models.DecimalField(decimal_places=2, max_digits=7)
 
     def calculate_stats(self, entries):

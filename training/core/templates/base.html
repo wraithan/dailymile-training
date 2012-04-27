@@ -3,10 +3,21 @@
 <html>
   <head>
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" type="text/css" rel="stylesheet" media="screen">
+    <link href="{{ STATIC_URL }}css/base.css" type="text/css" rel="stylesheet" media="screen">
     <style type="text/css">
       body {
         padding-top: 60px;
         padding-bottom: 40px;
+      }
+      .navbar ul.center.nav {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        float: none;
+      }
+      .navbar ul.center.nav > li {
+        display: inline-block;
+        float: none;
       }
     </style>
     {% block head %}
@@ -15,14 +26,32 @@
   <body>
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
-        <div class="container" style>
+        <div class="container">
           <a class="brand" href="{% url 'index' %}">Weekly Training</a>
+          <ul class="nav pull-right">
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'core_profile_view' username=user.username %}">Profile</a></li>
+          <li><a href="{% url 'logout' %}">Log out</a></li>
+          {% endif %}
+          </ul>
         </div>
       </div>
     </div>
     <div class="container">
-    {% block content %}
-    {% endblock content %}
+      {% block content %}
+      {% endblock content %}
+      <div class="navbar navbar-fixed-bottom">
+        <div class="navbar-inner">
+          <div class="container">
+            <ul class="nav center">
+              <li><a href="https://github.com/wraithan/dailymile-training">Source</a></li>
+              <li><a href="https://github.com/wraithan/dailymile-training/issues">Issues</a></li>
+              <li><a href="mailto:xwraithanx@gmail.com">Contact</a></li>
+              <li><a href="{% url 'about' %}">About</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

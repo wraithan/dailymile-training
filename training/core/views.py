@@ -7,11 +7,12 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect
 
 from training.core import (DAILYMILE_AUTH_URI, DAILYMILE_TOKEN_URI, oauth2_url,
                            oauth2_token)
-from training.core.models import DailyMileProfile
+from training.core.models import DailyMileProfile, Goal
 
 
 def register_dailymile(request):
@@ -52,4 +53,15 @@ def profile_view(request, username):
 @render_to('core/goals_edit.html')
 @login_required
 def profile_goals_edit(request):
-    return {'goals': request.user.get_profile().goal_set.all()}
+    user_profile = request.user.get_profile()
+    GoalFormSet = inlineformset_factory(DailyMileProfile, Goal, extra=1)
+    if request.method == "POST":
+        goal_forms = GoalFormSet(request.POST, instance=user_profile)
+        if goal_forms.is_valid:
+            goal_forms.save()
+            return HttpResponseRedirect(
+                reverse('core_profile_view',
+                        kwargs={'username': request.user.username}))
+    else:
+        goal_forms = GoalFormSet(instance=user_profile)
+    return {'goal_forms': goal_forms}

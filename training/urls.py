@@ -7,6 +7,10 @@ urlpatterns = patterns('',
         TemplateView.as_view(template_name='core/index.html'),
         name='index'),
 
+    url(r'^about$',
+        TemplateView.as_view(template_name='core/about.html'),
+        name='about'),
+
     url(r'^register/dailymile$',
         'training.core.views.register_dailymile',
         name='core_register_dailymile'),

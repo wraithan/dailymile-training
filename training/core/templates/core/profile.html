@@ -1,9 +1,11 @@
-<html>
-  <head>
+{% extends 'base.html' %}
+
+{% block head %}
     <link href="{{ STATIC_URL }}css/style.css" type="text/css" rel="stylesheet" media="screen">
     <script src="{{ STATIC_URL }}js/chart.js" type="text/javascript"></script>
-  </head>
-  <body>
+{% endblock head %}
+
+{% block content %}
     <h2>{{profile}}</h2>
     <div id="chart"></div>
     <script type="text/javascript">
@@ -13,5 +15,5 @@ var data = {{profile.stats_as_json|safe}}
 graph(data);
 
     </script>
-  </body>
-</html>
+{% endblock content %}
+

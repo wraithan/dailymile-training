@@ -29,7 +29,7 @@ def register_dailymile_callback(request):
         if 'state' in request.GET.keys():
             if request.GET['state'] == 'website':
                 HttpResponseRedirect(reverse('core_website_success'))
-    return locals()
+    return HttpResponseRedirect(reverse('index'))
 
 
 @render_to('core/profile.html')

@@ -1,1 +1,15 @@
-Ohai
+{% extends 'base.html' %}
+{% load url from future %}
+
+{% block content %}
+<p>Ohai</p>
+
+
+{% if user.is_authenticated %}
+<p>Go to your <a href="{% url 'core_profile_view' username=user.username %}">profile</a></p>
+
+<p><a href="{% url 'logout' %}">Log out</a></p>
+{% else %}
+<p>Log in using <a href="{% url 'core_register_dailymile' %}">Dailymile</a></p>
+{% endif %}
+{% endblock content %}

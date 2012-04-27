@@ -153,3 +153,11 @@ LOGGING = {
         },
     }
 }
+
+
+AUTH_PROFILE_MODULE = 'core.DailyMileProfile'
+
+AUTHENTICATION_BACKENDS = (
+    'training.core.backends.OAuth2Backend',
+    'django.contrib.auth.backends.ModelBackend',
+)

@@ -23,4 +23,8 @@ urlpatterns = patterns('',
     url(r'^profile/(?P<username>[\w.@+-]+)$',
         'training.core.views.profile_view',
         name='core_profile_view'),
+
+    url(r'^profile/goals/edit$',
+        'training.core.views.profile_goals_edit',
+        name='core_profile_goals_edit'),
 )

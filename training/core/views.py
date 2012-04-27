@@ -36,13 +36,20 @@ def register_dailymile_callback(request):
 def profile_view(request, username):
     profile = DailyMileProfile.objects.filter(user__username__iexact=username)
     is_current_user = False
+    stats = None
 
     if profile.exists():
         profile = profile.get()
-        profile.update_stats()
+        stats = profile.stats_as_json()
         is_current_user = profile.user == request.user
     else:
         profile = None
 
     return {'profile': profile,
-            'is_current_user': is_current_user}
+            'is_current_user': is_current_user,
+            'stats': stats,}
+
+@render_to('core/goals_edit.html')
+@login_required
+def profile_goals_edit(request):
+    return {'goals': request.user.get_profile().goal_set.all()}

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load url from future %}
 
 {% block head %}
     <link href="{{ STATIC_URL }}css/style.css" type="text/css" rel="stylesheet" media="screen">
@@ -6,14 +7,21 @@
 {% endblock head %}
 
 {% block content %}
-    <h2>{{profile}}</h2>
+{% if profile %}
+    <h1>{{profile}}</h1>
+    {% if is_current_user %}
+    <a href="{% url 'core_profile_goals_edit' %}">Edit Goals</a>
+    {% endif %}
     <div id="chart"></div>
     <script type="text/javascript">
 
-var data = {{profile.stats_as_json|safe}}
+var data = {{ stats|safe }}
 
 graph(data);
 
     </script>
+{% else %}
+    <h1>Profile does not exist</h1>
+{% endif %}
 {% endblock content %}
 

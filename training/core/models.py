@@ -8,35 +8,58 @@ from django.db import models
 import requests
 
 
+def dailymile_api_get(action, params):
+    url = 'https://api.dailymile.com/%s.json' % action
+    return requests.get(url, params=params)
+
+
 class DailyMileProfile(models.Model):
-    access_token = models.CharField(max_length=255)
     user = models.OneToOneField('auth.User')
+    access_token = models.CharField(max_length=255)
 
     def __unicode__(self):
         return self.user.username
 
-    def update_stats(self):
-        pass
+    def get_entries(self):
+        seven_days_ago = mktime((datetime.now()-timedelta(days=7)).timetuple())
+        page = 1
+        entries = []
+        while True:
+            res = dailymile_api_get('people/me/entries',
+                                    params={
+                                        'oauth_token': self.access_token,
+                                        'since': seven_days_ago,
+                                        'page': page,
+                                    })
+            retval = json.loads(res.content)
+            if retval['entries']:
+                entries.extend(retval['entries'])
+                page += 1
+            else:
+                break
+        return entries
 
     def stats_as_json(self):
-        retval = {'Cycling': {'real': 0, 'goal': 100},
-                  'Hiking': {'real': 0, 'goal': 5},
-                  'Running': {'real': 0, 'goal': 3}
-        }
+        entries = self.get_entries()
+        prepared_goals = {}
+        for goal in self.goal_set.all():
+            prepared_goals.update(goal.calculate_stats(entries))
 
-        api_endpoint='https://api.dailymile.com/'
-        seven_days_ago = mktime((datetime.now()-timedelta(days=7)).timetuple())
-        entries = json.loads(requests.get(
-            api_endpoint + 'people/me/entries.json',
-            params={
-                'oauth_token': self.access_token,
-                'since': seven_days_ago}
-        ).content)
+        return json.dumps(prepared_goals)
 
-        for entry in entries['entries']:
+class Goal(models.Model):
+    owner = models.ForeignKey('core.DailyMileProfile')
+    workout_type = models.CharField(max_length=255)
+    goal = models.DecimalField(decimal_places=2, max_digits=7)
+
+    def calculate_stats(self, entries):
+        total = 0
+        for entry in entries:
             if entry.has_key('workout'):
                 activity_type = entry['workout']['activity_type']
-                retval[activity_type]['real'] += entry['workout']['distance']['value']
-        for key,val in retval.items():
-            retval[key]['real'] = math.trunc(round(retval[key]['real']))
-        return retval
+                if self.workout_type == activity_type:
+                    total += entry['workout']['distance']['value']
+        return {self.workout_type: {'real': total, 'goal': str(self.goal)}}
+
+    def __unicode__(self):
+        return '%s: %s' % (self.workout_type, self.goal)

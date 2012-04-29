@@ -193,4 +193,4 @@ AUTHENTICATION_BACKENDS = (
 
 DAILYMILE_CLIENT_ID = os.environ.get('DAILYMILE_CLIENT_ID', None)
 DAILYMILE_CLIENT_SECRET = os.environ.get('DAILYMILE_CLIENT_SECRET', None)
-DAILYMILE_REDIRECT_URI = 'http://localhost.cc/register/dailymile-callback'
+DAILYMILE_REDIRECT_URI = 'http://training.wraithan.net/register/dailymile-callback'

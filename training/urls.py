@@ -11,6 +11,10 @@ urlpatterns = patterns('',
         TemplateView.as_view(template_name='core/about.html'),
         name='about'),
 
+    url(r'^stats$',
+        'training.core.views.stats',
+        name='stats'),
+
     url(r'^register/dailymile$',
         'training.core.views.register_dailymile',
         name='core_register_dailymile'),

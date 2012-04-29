@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import json
 
 from annoying.decorators import render_to
@@ -12,7 +13,7 @@ from django.http import HttpResponseRedirect
 
 from training.core import (DAILYMILE_AUTH_URI, DAILYMILE_TOKEN_URI, oauth2_url,
                            oauth2_token)
-from training.core.models import DailyMileProfile, Goal
+from training.core.models import DailyMileProfile, Goal, APICall
 
 
 def register_dailymile(request):
@@ -62,7 +63,6 @@ def profile_goals_edit(request):
     user_profile = request.user.get_profile()
     GoalFormSet = inlineformset_factory(DailyMileProfile, Goal, extra=1)
     if request.method == "POST":
-        import ipdb; ipdb.set_trace()
         goal_forms = GoalFormSet(request.POST, instance=user_profile)
         if goal_forms.is_valid:
             goal_forms.save()
@@ -70,3 +70,13 @@ def profile_goals_edit(request):
     else:
         goal_forms = GoalFormSet(instance=user_profile)
     return {'goal_forms': goal_forms}
+
+@render_to('core/stats.html')
+def stats(request):
+    hour_ago = datetime.now() - timedelta(hours=1)
+    api_call_count_total = APICall.objects.count()
+    api_call_count_hour = APICall.objects.filter(when__gte=hour_ago).count()
+    user_count = DailyMileProfile.objects.count()
+    return {'api_call_count_total': api_call_count_total,
+            'api_call_count_hour': api_call_count_hour,
+            'user_count': user_count,}

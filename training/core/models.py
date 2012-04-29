@@ -32,6 +32,7 @@ class DailyMileProfile(models.Model):
                                         'since': seven_days_ago,
                                         'page': page,
                                     })
+            APICall.objects.create()
             retval = json.loads(res.content)
             if retval['entries']:
                 entries.extend(retval['entries'])

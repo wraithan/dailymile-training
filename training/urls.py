@@ -24,6 +24,10 @@ urlpatterns = patterns('',
         {'next_page': '/'},
         name='logout'),
 
+    url(r'^profile/me$',
+        'training.core.views.profile_view_self',
+        name='core_profile_view_self'),
+
     url(r'^profile/(?P<username>[\w.@+-]+)$',
         'training.core.views.profile_view',
         name='core_profile_view'),

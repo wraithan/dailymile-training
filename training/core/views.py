@@ -50,18 +50,23 @@ def profile_view(request, username):
             'is_current_user': is_current_user,
             'stats': stats,}
 
+@login_required
+def profile_view_self(request):
+    return HttpResponseRedirect(
+        reverse('core_profile_view',
+                kwargs={'username': request.user.username}))
+
 @render_to('core/goals_edit.html')
 @login_required
 def profile_goals_edit(request):
     user_profile = request.user.get_profile()
     GoalFormSet = inlineformset_factory(DailyMileProfile, Goal, extra=1)
     if request.method == "POST":
+        import ipdb; ipdb.set_trace()
         goal_forms = GoalFormSet(request.POST, instance=user_profile)
         if goal_forms.is_valid:
             goal_forms.save()
-            return HttpResponseRedirect(
-                reverse('core_profile_view',
-                        kwargs={'username': request.user.username}))
+            return HttpResponseRedirect(reverse('core_profile_view_self'))
     else:
         goal_forms = GoalFormSet(instance=user_profile)
     return {'goal_forms': goal_forms}

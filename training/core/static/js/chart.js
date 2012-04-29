@@ -14,9 +14,9 @@ var graph = function (data) {
             var goal = document.createElement('div');
 
             label.appendChild(document.createTextNode(key
-                                                      + " goal:"
+                                                      + ' goal:'
                                                       + item.goal
-                                                      +  " real:"
+                                                      +  ' real:'
                                                       + item.real));
             chart.appendChild(label);
             real.setAttribute('id', item + 'Bar');

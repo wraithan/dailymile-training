@@ -1,3 +1,4 @@
 dev.db
 *.pyc
 local.py
+training/staticfiles

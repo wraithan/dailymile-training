@@ -7,6 +7,16 @@ urlpatterns = patterns('',
         TemplateView.as_view(template_name='core/index.html'),
         name='index'),
 
+    url(r'^loggedout$',
+        TemplateView.as_view(template_name='core/index.html'),
+        kwargs={'from': 'logout'},
+        name='loggedout'),
+
+    url(r'^logout$',
+        'django.contrib.auth.views.logout',
+        {'next_page': '/loggedout'},
+        name='logout'),
+
     url(r'^about$',
         TemplateView.as_view(template_name='core/about.html'),
         name='about'),
@@ -22,11 +32,6 @@ urlpatterns = patterns('',
     url(r'^register/dailymile-callback$',
         'training.core.views.register_dailymile_callback',
         name='core_register_dailymile_callback'),
-
-    url(r'^logout$',
-        'django.contrib.auth.views.logout',
-        {'next_page': '/'},
-        name='logout'),
 
     url(r'^profile/me$',
         'training.core.views.profile_view_self',

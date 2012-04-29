@@ -2,14 +2,14 @@
 {% load url from future %}
 
 {% block content %}
-<p>Ohai</p>
-
-
-{% if user.is_authenticated %}
-<p>Go to your <a href="{% url 'core_profile_view_self' %}">profile</a></p>
-
-<p><a href="{% url 'logout' %}">Log out</a></p>
-{% else %}
-<p>Log in using <a href="{% url 'core_register_dailymile' %}">Dailymile</a></p>
+{% if params.from == 'logout' %}
+<div class="alert alert-info">
+  <p><strong>Logged Out!</strong> You've been successfully logged out</p>
+</div>
 {% endif %}
+<div class="hero-unit">
+<h1>Weekly Training</h1>
+<p>This is a site that lets you create weekly goals for yourself. Then takes your workouts on Dailymile and organizes them into your goals!</p>
+<p><a href="{% url 'about' %}" class="btn btn-primary">Learn More</a></p>
+</div>
 {% endblock content %}

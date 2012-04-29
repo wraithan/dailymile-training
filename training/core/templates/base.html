@@ -45,6 +45,8 @@
           {% if user.is_authenticated %}
           <li><a href="{% url 'core_profile_view' username=user.username %}">Profile</a></li>
           <li><a href="{% url 'logout' %}">Log out</a></li>
+          {% else %}
+          <li><a href="{% url 'core_register_dailymile' %}">Log in</a></li>
           {% endif %}
           </ul>
         </div>

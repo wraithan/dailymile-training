@@ -45,3 +45,11 @@ urlpatterns = patterns('',
         'training.core.views.profile_goals_edit',
         name='core_profile_goals_edit'),
 )
+
+# HACK
+from django.conf import settings
+urlpatterns += patterns('',
+    (r'^static/(?P<path>.*)$',
+     'django.views.static.serve',
+     {'document_root': settings.STATIC_ROOT}),
+)

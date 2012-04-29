@@ -150,7 +150,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'widget_tweaks',
+    'gunicorn',
     'training.core',
 )
 

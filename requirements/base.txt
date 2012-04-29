@@ -1,1 +1,5 @@
 Django==1.4
+django-annoying==0.7.6
+django-model-utils==1.1.0
+django-widget-tweaks==1.1.1
+requests==0.11.2

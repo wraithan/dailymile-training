@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="span4">
+    <table class="table table-striped">
+      <caption>Counts</caption>
+      <thead>
+        <th>Type</th>
+        <th>Count</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>API Call Count</strong> (last hour)</td>
+          <td>{{api_call_count_hour}}</td>
+        </tr>
+        <tr>
+          <td><strong>API Call Count</strong> (total)</td>
+          <td>{{api_call_count_total}}</td>
+        </tr>
+        <tr>
+          <td><strong>Users</strong></td>
+          <td>{{user_count}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %}

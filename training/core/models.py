@@ -43,15 +43,15 @@ class DailyMileProfile(models.Model):
 
     def stats_as_json(self):
         entries = self.get_entries()
-        prepared_goals = {}
+        prepared_goals = []
         for goal in self.goal_set.all():
-            prepared_goals.update(goal.calculate_stats(entries))
+            prepared_goals.append(goal.calculate_stats(entries))
 
         return json.dumps(prepared_goals)
 
 class Goal(models.Model):
-    WORKOUT_TYPE = Choices('Cycling', 'Hiking', 'Running',
-                           'Walking', 'Swimming')
+    WORKOUT_TYPE = Choices('Cycling', 'Hiking', 'Running', 'Walking',
+                           'Swimming')
     owner = models.ForeignKey('core.DailyMileProfile')
     workout_type = models.CharField(choices=WORKOUT_TYPE, max_length=255)
     goal = models.DecimalField(decimal_places=2, max_digits=7)
@@ -63,7 +63,12 @@ class Goal(models.Model):
                 activity_type = entry['workout']['activity_type']
                 if self.workout_type == activity_type:
                     total += entry['workout']['distance']['value']
-        return {self.workout_type: {'real': total, 'goal': str(self.goal)}}
+        return {'type': self.workout_type,
+                'real': total,
+                'goal': str(self.goal)}
 
     def __unicode__(self):
         return '%s: %s' % (self.workout_type, self.goal)
+
+class APICall(models.Model):
+    when = models.DateTimeField(auto_now_add=True)

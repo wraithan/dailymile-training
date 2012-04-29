@@ -1,7 +1,12 @@
-# Django settings for training project.
+import os
+import sys
+import urlparse
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+
+SETTINGS_PATH = os.path.dirname(os.path.realpath(__file__))
+SITE_ROOT = os.path.abspath(os.path.join(SETTINGS_PATH, '../'))
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -9,16 +14,39 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'dev.db',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-    }
-}
+if os.environ.get('DATABASE_URL', False):
+    urlparse.uses_netloc.append('postgres')
+    urlparse.uses_netloc.append('mysql')
+
+    try:
+        # Check to make sure DATABASES is set in settings.py file.
+        # If not default to {}
+
+        if 'DATABASES' not in locals():
+            DATABASES = {}
+
+        if 'DATABASE_URL' in os.environ:
+            url = urlparse.urlparse(os.environ['DATABASE_URL'])
+
+            # Ensure default database exists.
+            DATABASES['default'] = DATABASES.get('default', {})
+
+            # Update with environment configuration.
+            DATABASES['default'].update({
+                'NAME': url.path[1:],
+                'USER': url.username,
+                'PASSWORD': url.password,
+                'HOST': url.hostname,
+                'PORT': url.port,
+            })
+            if url.scheme == 'postgres':
+                DATABASES['default']['ENGINE'] = \
+                                        'django.db.backends.postgresql_psycopg2'
+
+            if url.scheme == 'mysql':
+                DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
+    except Exception:
+        print 'Unexpected error:', sys.exc_info()
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -27,7 +55,7 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'America/Los_Angeles'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -59,7 +87,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -122,6 +150,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'widget_tweaks',
     'training.core',
 )
 
@@ -161,3 +190,9 @@ AUTHENTICATION_BACKENDS = (
     'training.core.backends.OAuth2Backend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+DAILYMILE_CLIENT_ID = os.environ.get('DAILYMILE_CLIENT_ID',
+                                     DAILYMILE_CLIENT_ID)
+DAILYMILE_CLIENT_SECRET = os.environ.get('DAILYMILE_CLIENT_SECRET',
+                                         DAILYMILE_CLIENT_SECRET)
+DAILYMILE_REDIRECT_URI = 'http://localhost.cc/register/dailymile-callback'

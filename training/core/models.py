@@ -64,7 +64,7 @@ class Goal(models.Model):
                 if self.workout_type == activity_type:
                     total += entry['workout']['distance']['value']
         return {'type': self.workout_type,
-                'real': total,
+                'real': round(total, 2),
                 'goal': str(self.goal)}
 
     def __unicode__(self):

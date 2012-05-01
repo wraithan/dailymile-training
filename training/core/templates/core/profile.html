@@ -8,7 +8,7 @@
 
 {% block content %}
 {% if profile %}
-    <h1>{{profile}}</h1>
+    <a href="{{ profile.dailymile_url }}"><h1>{{profile.user.first_name}}</h1></a>
     {% if is_current_user %}
     <a href="{% url 'core_profile_goals_edit' %}">Edit Goals</a>
     {% endif %}

@@ -41,6 +41,7 @@ class OAuth2Backend(object):
                 user = user.get()
                 profile = user.get_profile()
                 profile.access_token = auth_stuff['access_token']
+                profile.dailymile_url = user_stuff['url']
                 profile.save()
             else:
                 user = User.objects.create(

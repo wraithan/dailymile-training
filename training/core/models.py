@@ -16,6 +16,7 @@ def dailymile_api_get(action, params):
 
 class DailyMileProfile(models.Model):
     user = models.OneToOneField('auth.User')
+    dailymile_url = models.TextField()
     access_token = models.CharField(max_length=255)
 
     def __unicode__(self):

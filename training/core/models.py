@@ -38,7 +38,7 @@ class DailyMileProfile(models.Model):
             if retval['entries']:
                 entries.extend(retval['entries'])
                 page += 1
-            else:
+            if len(retval['entries']) < 20:
                 break
         return entries
 

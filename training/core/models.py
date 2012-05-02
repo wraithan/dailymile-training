@@ -51,19 +51,34 @@ class DailyMileProfile(models.Model):
         return json.dumps(prepared_goals)
 
 class Goal(models.Model):
-    WORKOUT_TYPE = Choices('Cycling', 'Hiking', 'Running', 'Walking',
-                           'Swimming')
+    WORKOUT_TYPE = Choices(('cycling', 'Cycling'),
+                           ('hiking', 'Hiking'),
+                           ('running', 'Running'),
+                           ('walking', 'Walking'),
+                           ('swimming', 'Swimming'),)
+    GOAL_TYPE = Choices(('total_distance', 'Total Distance'),
+                        ('total_duration', 'Total Duration'),
+                        ('workout_distance', 'Workout Distance'),
+                        ('workout_duration','Workout Duration'),)
     owner = models.ForeignKey('core.DailyMileProfile')
     workout_type = models.CharField(choices=WORKOUT_TYPE, max_length=255)
+    goal_type = models.CharField(choices=GOAL_TYPE, max_length=255)
     goal = models.DecimalField(decimal_places=2, max_digits=7)
 
     def calculate_stats(self, entries):
+        if self.goal_type == self.GOAL_TYPE.total_distance:
+            return self.calculate_total_distance_stats(entries)
+        elif self.goal_type == self.GOAL_TYPE.total_duration:
+            pass
+
+    def calculate_total_distance_stats(self, entries):
         total = 0
         for entry in entries:
-            if entry.has_key('workout'):
-                activity_type = entry['workout']['activity_type']
-                if self.workout_type == activity_type:
-                    total += entry['workout']['distance']['value']
+            if 'workout' in entry:
+                workout = entry['workout']
+                if self.get_workout_type_display() == workout['activity_type']:
+                    if 'distance' in workout:
+                        total += workout['distance']['value']
         return {'type': self.workout_type,
                 'real': round(total, 2),
                 'goal': str(self.goal)}

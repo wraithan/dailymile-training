@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 import requests
 
 from training.core import DAILYMILE_TOKEN_URI, oauth2_token
+from training.core.dailymile import api_get
 from training.core.models import DailyMileProfile
-
 
 class OAuth2Backend(object):
     """
@@ -27,15 +27,9 @@ class OAuth2Backend(object):
                                       settings.DAILYMILE_CLIENT_SECRET,
                                       code,
                                       settings.DAILYMILE_REDIRECT_URI)
-            APICall.objects.create()
 
-            api_endpoint='https://api.dailymile.com/'
-
-            user_stuff = json.loads(requests.get(
-                api_endpoint + 'people/me.json',
-                params={'oauth_token': auth_stuff['access_token']}
-            ).content)
-            APICall.objects.create()
+            user_stuff = api_get('people/me',
+                                 params={'oauth_token': auth_stuff['access_token']}).json
 
             user = User.objects.filter(username=user_stuff['username'])
 

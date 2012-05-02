@@ -8,10 +8,7 @@ from django.db import models
 from model_utils import Choices
 import requests
 
-
-def dailymile_api_get(action, params):
-    url = 'https://api.dailymile.com/%s.json' % action
-    return requests.get(url, params=params)
+from training.core.dailymile import api_get
 
 
 class DailyMileProfile(models.Model):
@@ -27,14 +24,12 @@ class DailyMileProfile(models.Model):
         page = 1
         entries = []
         while True:
-            res = dailymile_api_get('people/me/entries',
-                                    params={
-                                        'oauth_token': self.access_token,
-                                        'since': seven_days_ago,
-                                        'page': page,
-                                    })
-            APICall.objects.create()
-            retval = json.loads(res.content)
+            retval = api_get('people/me/entries',
+                             params={
+                                 'oauth_token': self.access_token,
+                                 'since': seven_days_ago,
+                                 'page': page,
+                             }).json
             if retval['entries']:
                 entries.extend(retval['entries'])
                 page += 1

@@ -88,7 +88,7 @@ def stats(request):
         api_call_for_chart[(when-60)*1000] # hack to 0 between known points
         api_call_for_chart[when*1000]+=1
         api_call_for_chart[(when+60)*1000] # hack to 0 between known points
-    api_call_for_chart = [[key,value] for key,value in api_call_for_chart.iteritems()]
+    api_call_for_chart = [[key,val] for key,val in api_call_for_chart.iteritems()]
     api_call_for_chart = sorted(api_call_for_chart, key=lambda a: a[0])
     return {'api_call_count_total': api_call_count_total,
             'api_call_count_hour': api_call_count_hour,

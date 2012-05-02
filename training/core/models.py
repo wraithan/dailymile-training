@@ -79,7 +79,7 @@ class Goal(models.Model):
                 if self.get_workout_type_display() == workout['activity_type']:
                     if 'distance' in workout:
                         total += workout['distance']['value']
-        return {'type': self.workout_type,
+        return {'type': self.get_workout_type_display(),
                 'real': round(total, 2),
                 'goal': str(self.goal)}
 

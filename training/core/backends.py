@@ -27,6 +27,7 @@ class OAuth2Backend(object):
                                       settings.DAILYMILE_CLIENT_SECRET,
                                       code,
                                       settings.DAILYMILE_REDIRECT_URI)
+            APICall.objects.create()
 
             api_endpoint='https://api.dailymile.com/'
 
@@ -34,6 +35,7 @@ class OAuth2Backend(object):
                 api_endpoint + 'people/me.json',
                 params={'oauth_token': auth_stuff['access_token']}
             ).content)
+            APICall.objects.create()
 
             user = User.objects.filter(username=user_stuff['username'])
 

@@ -84,15 +84,6 @@ def stats(request):
     api_call_count_total = APICall.objects.count()
     api_call_count_hour = APICall.objects.filter(when__gte=hour_ago).count()
     user_count = DailyMileProfile.objects.count()
-    api_call_for_chart = defaultdict(int)
-    for o in APICall.objects.raw("""SELECT date_trunc('minutes', "when") as new_when,id FROM core_apicall"""):
-        when = int(time.mktime(o.new_when.timetuple()))
-        api_call_for_chart[(when-60)*1000] # hack to 0 between known points
-        api_call_for_chart[when*1000]+=1
-        api_call_for_chart[(when+60)*1000] # hack to 0 between known points
-    api_call_for_chart = [[key,val] for key,val in api_call_for_chart.iteritems()]
-    api_call_for_chart = sorted(api_call_for_chart, key=lambda a: a[0])
     return {'api_call_count_total': api_call_count_total,
             'api_call_count_hour': api_call_count_hour,
-            'user_count': user_count,
-            'api_call_for_chart': api_call_for_chart,}
+            'user_count': user_count,}

@@ -33,22 +33,4 @@
 {% endblock content %}
 
 {% block inlinejs %}
-<script src="{{ STATIC_URL }}js/highstock.src.js" type="text/javascript"></script>
-<script src="{{ STATIC_URL }}js/exporting.src.js" type="text/javascript"></script>
-<script type="text/javascript">
-    var chart = new Highcharts.StockChart({
-        chart: {
-            renderTo: 'chart',
-            type: 'spline',
-        },
-        xAxis: {
-            type: 'datetime',
-            ordinal: false,
-        },
-        series: [{
-            name: 'API Calls',
-            data: {{ api_call_for_chart }},
-        }]
-    });
-</script>
 {% endblock inlinejs %}

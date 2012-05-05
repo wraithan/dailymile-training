@@ -66,7 +66,9 @@ def profile_view_self(request):
 def profile_goals_edit(request):
     user_profile = request.user.get_profile()
     GoalFormSet = inlineformset_factory(DailyMileProfile, Goal, extra=1,
-                                        fields=('goal','workout_type'))
+                                        fields=('workout_type', 'goal_type',
+                                                'goal_amount', 'goal_count'))
+
     if request.method == "POST":
         goal_forms = GoalFormSet(request.POST, instance=user_profile)
         if goal_forms.is_valid:

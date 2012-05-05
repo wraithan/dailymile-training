@@ -11,17 +11,17 @@ var graph = function (data) {
         var real = document.createElement('div');
         var goal = document.createElement('div');
 
-        label.appendChild(document.createTextNode(item.type
+        label.appendChild(document.createTextNode(item.label
                                                   + ' goal:'
                                                   + item.goal
                                                   +  ' real:'
                                                   + item.real));
         chart.appendChild(label);
         real.setAttribute('id', item + 'Bar');
-        real.setAttribute('class', 'real');
+        real.setAttribute('class', 'chart-real');
         real.style.width = derive_width(item.real, max) + 'px';
         label.appendChild(real);
-        goal.setAttribute('class', 'goal');
+        goal.setAttribute('class', 'chart-goal');
         goal.style.width = derive_width(item.goal, max) + 'px';
         goal.appendChild(document.createTextNode('\u00a0'));
         real.appendChild(goal);

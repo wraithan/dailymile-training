@@ -4,10 +4,26 @@
   border-bottom-right-radius: 3px;
 }
 
-.real {
+.chart-real {
   background-color: rgba(100, 255, 0, 0.5);
 }
 
-.goal {
+.chart-goal {
   background-color: rgba(200, 100, 105, 0.5);
+}
+
+.control-label {
+  white-space: nowrap;
+}
+
+.individual-goal {
+  display: inline-block;
+  vertical-align: baseline;
+  padding: 5px;
+  margin: 5px;
+  background-color: #EEF;
+  border-style: solid;
+  border-width: 1px;
+  border-color: blue;
+  border-radius: 15px;
 }

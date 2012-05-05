@@ -2,27 +2,40 @@
 {% load url from future %}
 
 {% block content %}
-<div class="row">
-  <div class="span16">
-    <div class="goal">
-      <form class="form-horizontal" method="POST" action="{% url 'core_profile_goals_edit' %}">{% csrf_token %}
-        <fieldset>
-          {{ goal_forms.management_form }}
-          {% for form in goal_forms %}
-          <div class="control-group">
+<form class="form-horizontal" method="POST" action="{% url 'core_profile_goals_edit' %}">{% csrf_token %}
+  <div class="row">
+    <div class="goal-container">
+    <div class="span16">
+      <fieldset>
+        {{ goal_forms.management_form }}
+        {% for form in goal_forms %}
+        <div class="individual-goal">
+          <div class="control-group workout-type">
             <label class="control-label" for="{{form.workout_type.auto_id}}">Workout Type</label>
             <div class="controls">
               {{ form.workout_type }}
             </div>
           </div>
-          <div class="control-group">
-            <label class="control-label" for="{{form.goal.auto_id}}">Goal (in miles)</label>
+          <div class="control-group goal-type">
+            <label class="control-label" for="{{form.goal_type.auto_id}}">Goal Type</label>
             <div class="controls">
-              {{ form.goal }}
+              {{ form.goal_type }}
+            </div>
+          </div>
+          <div class="control-group goal-amount">
+            <label class="control-label" for="{{form.goal_amount.auto_id}}">Goal Amount (in minutes)</label>
+            <div class="controls">
+              {{ form.goal_amount }}
+            </div>
+          </div>
+          <div class="control-group goal-count">
+            <label class="control-label" for="{{form.goal_count.auto_id}}">Goal Count</label>
+            <div class="controls">
+              {{ form.goal_count }}
             </div>
           </div>
           {% if goal_forms.can_delete %}
-          <div class="control-group">
+          <div class="control-group delete">
             <label class="control-label" for="{{form.DELETE.auto_id}}">Delete?</label>
             <div class="controls">
               {{ form.DELETE }}
@@ -32,14 +45,49 @@
           {% for field in form.hidden_fields %}
           {{ field }}
           {% endfor %}
-          {% endfor %}
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Save changes</button>
-            <a href="{% url 'core_profile_view' username=user.username %}" class="btn">Cancel</a>
-          </div>
-        </fieldset>
-      </form>
+        </div>
+        {% endfor %}
+      </fieldset>
+    </div>
     </div>
   </div>
-</div>
+  <div class="row">
+    <div class="span16">
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        <a href="{% url 'core_profile_view' username=user.username %}" class="btn">Cancel</a>
+      </div>
+    </div>
+  </div>
+</form>
 {% endblock content %}
+
+{% block inlinejs %}
+
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+    $('.goal-type select').each(workout_type_changed);
+    $('.goal-type select').live('change', workout_type_changed);
+});
+
+function workout_type_changed(){
+    var element = $(this)
+    if (this.value.indexOf('workout_') === 0) {
+        element.parents('.individual-goal').children('.goal-count').show();
+    } else {
+        element.parents('.individual-goal').children('.goal-count').hide();
+    }
+
+    var substr = String('_duration');
+    var index = this.value.lastIndexOf(substr)
+    if (index >= 0 && index === this.value.length - substr.length) {
+        element.parents('.individual-goal').children('.goal-amount').children('label').text('Goal Amount (in minutes)');
+    } else {
+        element.parents('.individual-goal').children('.goal-amount').children('label').text('Goal Amount (in miles)');
+    }
+}
+
+</script>
+{% endblock inlinejs %}

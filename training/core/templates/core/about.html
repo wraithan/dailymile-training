@@ -2,7 +2,8 @@
 
 {% block content %}
 <div class="row">
-  <div class="span12">
+  <div class="span8">
+    <h2>About</h2>
     <dl>
       <dt>Why does this site exist?</dt>
       <dd>Dailymile doesn't have anything that lets someone set recurring goals. They have challenges, which are great for what they are, but I didn't want to end up creating a challenge for each type of exercise I did each week.</dd>
@@ -13,6 +14,16 @@
       <dt>Who wrote this?</dt>
       <dd>This site is a side project of <a href="http://wraithan.net/">Wraithan</a>.</dd>
     </dl>
+  </div>
+  <div class="span4">
+    <h2>Powered By:</h2><br>
+    <ul class="unstyled">
+      <li><img src="{{ STATIC_URL}}image/dailymile.png"></li><br>
+      <li><img src="{{ STATIC_URL}}image/heroku.png"></li><br>
+      <li><img src="{{ STATIC_URL}}image/django.gif"></li><br>
+      <li><img src="{{ STATIC_URL}}image/python.png"></li><br>
+      <li><img src="{{ STATIC_URL}}image/postgresql.gif"></li><br>
+    </ul>
   </div>
 </div>
 {% endblock content %}

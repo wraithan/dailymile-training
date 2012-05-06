@@ -5,11 +5,11 @@
 }
 
 .chart-real {
-  background-color: rgba(100, 255, 0, 0.5);
+  background-color: rgba(30, 100, 255, 0.5);
 }
 
 .chart-goal {
-  background-color: rgba(200, 100, 105, 0.5);
+  background-color: rgba(200, 30, 30, 0.5);
 }
 
 .control-label {

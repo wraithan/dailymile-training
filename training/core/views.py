@@ -56,9 +56,6 @@ def profile_view(request, username):
     else:
         friends = []
 
-    # shim
-    friends = DailyMileProfile.objects.all()
-
     return {'profile': profile,
             'friends': friends,
             'is_current_user': is_current_user,

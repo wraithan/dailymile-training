@@ -45,6 +45,13 @@ class DailyMileProfile(models.Model):
 
         return json.dumps(prepared_goals)
 
+    def friends(self):
+        retval = api_get('/people/me/friends',
+                         params={'oauth_token': self.access_token})
+        usernames = [friend['username'] for friend in retval.json['friends']]
+        return DailyMileProfile.objects.filter(user__username__in=usernames)
+
+
 class Goal(models.Model):
     WORKOUT_TYPE = Choices(('cycling', 'Cycling'),
                            ('hiking', 'Hiking'),

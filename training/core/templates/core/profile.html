@@ -7,11 +7,25 @@
 
 {% block content %}
 {% if profile %}
-    <a href="{{ profile.dailymile_url }}"><h1>{{profile.user.first_name}}</h1></a>
-    {% if is_current_user %}
-    <a href="{% url 'core_profile_goals_edit' %}">Edit Goals</a>
-    {% endif %}
-    <div id="chart"></div>
+    <div class="row">
+      <div class="span6">
+        <a href="{{ profile.dailymile_url }}"><h2>{{profile.user.first_name}}</h2></a>
+        <div id="chart"></div>
+        {% if is_current_user %}
+        <a href="{% url 'core_profile_goals_edit' %}" class="btn btn-primary">Edit Goals</a>
+        {% endif %}
+      </div>
+      {% if friends %}
+      <div class="span6">
+        <h2>Friends</h2>
+        <ul>
+          {% for friend in friends %}
+          <li><a href="{% url 'core_profile_view' friend.user.username %}">{{ friend.user.first_name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
 {% else %}
     <h1>Profile does not exist</h1>
 {% endif %}

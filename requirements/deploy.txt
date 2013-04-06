@@ -1,2 +1,2 @@
 -r base.txt
-gunicorn==0.14.2
+gunicorn==0.17.2

@@ -1,22 +1,14 @@
-from collections import defaultdict
 from datetime import datetime, timedelta
-import json
-import time
 
 from annoying.decorators import render_to
-import requests
 from django.conf import settings
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.db.models import Count
 from django.forms.models import inlineformset_factory
 from django.http import HttpResponseRedirect
 
-
-from training.core import (DAILYMILE_AUTH_URI, DAILYMILE_TOKEN_URI, oauth2_url,
-                           oauth2_token)
+from training.core import DAILYMILE_AUTH_URI, oauth2_url
 from training.core.models import DailyMileProfile, Goal, APICall
 
 
@@ -59,13 +51,15 @@ def profile_view(request, username):
     return {'profile': profile,
             'friends': friends,
             'is_current_user': is_current_user,
-            'stats': stats,}
+            'stats': stats}
+
 
 @login_required
 def profile_view_self(request):
     return HttpResponseRedirect(
         reverse('core_profile_view',
                 kwargs={'username': request.user.username}))
+
 
 @render_to('core/goals_edit.html')
 @login_required
@@ -84,6 +78,7 @@ def profile_goals_edit(request):
         goal_forms = GoalFormSet(instance=user_profile)
     return {'goal_forms': goal_forms}
 
+
 @render_to('core/stats.html')
 def stats(request):
     hour_ago = datetime.now() - timedelta(hours=1)
@@ -92,4 +87,4 @@ def stats(request):
     user_count = DailyMileProfile.objects.count()
     return {'api_call_count_total': api_call_count_total,
             'api_call_count_hour': api_call_count_hour,
-            'user_count': user_count,}
+            'user_count': user_count}

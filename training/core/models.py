@@ -1,12 +1,9 @@
-from collections import defaultdict
 from datetime import datetime, timedelta
 import json
-import math
 from time import mktime
 
 from django.db import models
 from model_utils import Choices
-import requests
 
 from training.core.dailymile import api_get
 
@@ -61,7 +58,7 @@ class Goal(models.Model):
     GOAL_TYPE = Choices(('total_distance', 'Total Distance'),
                         ('total_duration', 'Total Duration'),
                         ('workout_distance', 'Workout Distance'),
-                        ('workout_duration','Workout Duration'),)
+                        ('workout_duration', 'Workout Duration'),)
     total_goals = (GOAL_TYPE.total_distance, GOAL_TYPE.total_duration)
     count_goals = (GOAL_TYPE.workout_distance, GOAL_TYPE.workout_duration)
     duration_goals = (GOAL_TYPE.total_distance, GOAL_TYPE.workout_distance)
@@ -89,7 +86,7 @@ class Goal(models.Model):
             goal = self.goal_amount
         return {'label': self.label,
                 'real': real,
-                'goal': str(goal),}
+                'goal': str(goal)}
 
     def get_valid_workouts(self, entries):
         valid_workouts = []
@@ -112,7 +109,7 @@ class Goal(models.Model):
         for workout in valid_workouts:
             if 'distance' in workout:
                 if workout['distance']['value'] >= self.goal_amount:
-                    total +=1
+                    total += 1
         return total
 
     def calculate_total_duration_stats(self, valid_workouts):
@@ -120,7 +117,7 @@ class Goal(models.Model):
         for workout in valid_workouts:
             if 'duration' in workout:
                 total += timedelta(seconds=workout['duration'])
-        return round((total.seconds)/60,2)
+        return round((total.seconds)/60, 2)
 
     def calculate_workout_duration_stats(self, valid_workouts):
         total = 0
@@ -161,9 +158,9 @@ class Goal(models.Model):
         return "%(type)s (%(units)s)" % {'type': workout_type,
                                          'units': self.units}
 
-
     def __unicode__(self):
         return '%s: %s' % (self.workout_type, self.goal_amount)
+
 
 class APICall(models.Model):
     when = models.DateTimeField(auto_now_add=True)

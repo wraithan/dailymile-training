@@ -1,8 +1,9 @@
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls.defaults import patterns, url
 from django.views.generic.base import TemplateView
 
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',  # Base view
     url(r'^$',
         TemplateView.as_view(template_name='core/index.html'),
         name='index'),
@@ -48,7 +49,8 @@ urlpatterns = patterns('',
 
 # HACK
 from django.conf import settings
-urlpatterns += patterns('',
+urlpatterns += patterns(
+    '',  # Base view
     (r'^static/(?P<path>.*)$',
      'django.views.static.serve',
      {'document_root': settings.STATIC_ROOT}),

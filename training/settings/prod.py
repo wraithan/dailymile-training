@@ -1,4 +1,4 @@
-from base import *
+from base import *  # noqa
 
 TEMPALTE_DEBUG = DEBUG = False
 

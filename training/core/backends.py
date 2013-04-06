@@ -1,12 +1,10 @@
-import json
-
 from django.conf import settings
 from django.contrib.auth.models import User
-import requests
 
 from training.core import DAILYMILE_TOKEN_URI, oauth2_token
 from training.core.dailymile import api_get
 from training.core.models import DailyMileProfile
+
 
 class OAuth2Backend(object):
     """
@@ -29,7 +27,9 @@ class OAuth2Backend(object):
                                       settings.DAILYMILE_REDIRECT_URI)
 
             user_stuff = api_get('people/me',
-                                 params={'oauth_token': auth_stuff['access_token']}).json
+                                 params={
+                                     'oauth_token': auth_stuff['access_token']
+                                 }).json
 
             user = User.objects.filter(username=user_stuff['username'])
 

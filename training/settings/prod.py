@@ -2,4 +2,4 @@ from base import *  # noqa
 
 TEMPALTE_DEBUG = DEBUG = False
 
-INSTALLED_APPS += ('gunicorn')
+INSTALLED_APPS += ('gunicorn',)
